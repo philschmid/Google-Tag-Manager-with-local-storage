@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Google Tag Manager</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=UA-144693941-1"
+    ></script>
+
+    <script>
+      // https://developers.google.com/tag-manager/devguide
+      window.dataLayer = window.dataLayer || []
+      function gtag() {
+        dataLayer.push(arguments)
+      }
+
+      // defines localstorage variable
+      const GA_LOCAL_STORAGE_KEY = 'ga:clientId'
+
+      // checks if localstorage is available
+      if (window.localStorage) {
+        // checks if user was already connected and loads id from localstorage
+        if (localStorage.getItem(GA_LOCAL_STORAGE_KEY)) {
+          // creates new tracker with same id as the last time the user visited
+          gtag('js', new Date())
+          gtag('config', 'UA-144693941-1', {
+            send_page_view: true,
+            client_storage: 'none',
+            client_id: localStorage.getItem(GA_LOCAL_STORAGE_KEY),
+          })
+        } else {
+          // creates id and saves it in localStorage -> currently random number better would be a uuid
+          window.localStorage.setItem(
+            GA_LOCAL_STORAGE_KEY,
+            Math.round(Math.random() * 1000000)
+          )
+          // creates new tracker with the new id
+          gtag('js', new Date())
+          gtag('config', 'UA-144693941-1', {
+            send_page_view: true,
+            client_storage: 'none',
+            client_id: localStorage.getItem(GA_LOCAL_STORAGE_KEY),
+          })
+        }
+      }
+      // test event after init
+      gtag('event', 'test', {
+        event_category: 'after-start',
+        event_label: 'after-start',
+      })
+    </script>
+  </head>
+  <body>
+    <h1>Mein Google Tag Manger test</h1>
+    <button id="ga-event">Click me for an GTAG Event</button>
+  </body>
+  <script>
+    // test event on button click
+    document.getElementById('ga-event').addEventListener('click', function () {
+      console.log('event')
+      gtag('event', 'test', {
+        event_category: 'button',
+        event_label: 'button',
+      })
+    })
+  </script>
+</html>
